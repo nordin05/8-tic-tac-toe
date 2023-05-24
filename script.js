@@ -17,7 +17,7 @@ const Gameboard = (function () {
     for (let i = 0; i < rows; i++) {
         boardArray[i] = [];
         for (let j = 0; j < columns; j++) {
-            boardArray[i].push(".");
+            boardArray[i].push("");
         }
     }
 
@@ -31,6 +31,8 @@ const Gameboard = (function () {
         c7 = boardArray[2][0];
         c8 = boardArray[2][1];
         c9 = boardArray[2][2];
+
+        return [c1, c2, c3, c4, c5, c6, c7, c8, c9];
     };
 
     const changeCell = function (row, column, token) {
@@ -38,7 +40,7 @@ const Gameboard = (function () {
     };
 
     const IsEmpty = function (row, column) {
-        return boardArray[row][column] == ".";
+        return boardArray[row][column] == "";
     };
 
     const renderBoard = function () {
@@ -103,7 +105,7 @@ const Gameboard = (function () {
     };
 
     const isTied = function () {
-        if (isTokenInArray(boardArray, ".")) {
+        if (isTokenInArray(boardArray, "")) {
             return false;
         }
 
@@ -111,7 +113,7 @@ const Gameboard = (function () {
     };
 
     renderBoard();
-    return { changeCell, IsEmpty, IsGameOver };
+    return { changeCell, IsEmpty, IsGameOver, updateCellVar };
 })();
 
 const GameController = (function () {
@@ -160,6 +162,34 @@ const GameController = (function () {
     return { startRound, getWinner };
 })();
 
-while (GameController.getWinner() == undefined) {
-    GameController.startRound();
-}
+const screenController = (function () {
+    const grid_container = document.querySelector(".grid-container");
+
+    const createGridDivs = function () {
+        for (let i = 0; i < 3 * 3; i++) {
+            const newDiv = document.createElement("div");
+            newDiv.id = `c${i + 1}`;
+            grid_container.appendChild(newDiv);
+        }
+    };
+
+    const updateCellDivs = function () {
+        cellValues = Gameboard.updateCellVar();
+        cellDivs = [...grid_container.querySelectorAll(":scope > div")];
+
+        i = 0;
+        cellDivs.forEach((cell) => {
+            cell.innerHTML = cellValues[i];
+            i += 1;
+        });
+        console.log(cells);
+    };
+
+    createGridDivs();
+    updateCellDivs();
+    return {};
+})();
+
+// while (GameController.getWinner() == undefined) {
+//     GameController.startRound();
+// }
