@@ -112,8 +112,17 @@ const Gameboard = (function () {
         return true;
     };
 
+    const convert1Dto2D = function (str) {
+        console.log(str);
+        index = parseInt(str) - 1;
+        row = Math.floor(index / 3);
+        column = index % 3;
+
+        return [row, column];
+    };
+
     renderBoard();
-    return { changeCell, IsEmpty, IsGameOver, updateCellVar };
+    return { changeCell, IsEmpty, IsGameOver, updateCellVar, convert1Dto2D };
 })();
 
 const GameController = (function () {
@@ -121,6 +130,8 @@ const GameController = (function () {
     let winner;
 
     const getWinner = () => winner;
+
+    const getTurn = () => currentTurn;
 
     const switchTurn = function () {
         currentTurn = currentTurn === player1 ? player2 : player1;
@@ -159,7 +170,7 @@ const GameController = (function () {
         }
     };
 
-    return { startRound, getWinner };
+    return { startRound, getWinner, getTurn, switchTurn };
 })();
 
 const screenController = (function () {
@@ -175,18 +186,34 @@ const screenController = (function () {
 
     const updateCellDivs = function () {
         cellValues = Gameboard.updateCellVar();
-        cellDivs = [...grid_container.querySelectorAll(":scope > div")];
+        grid_cells = [...grid_container.querySelectorAll(":scope > div")];
 
         i = 0;
-        cellDivs.forEach((cell) => {
+        grid_cells.forEach((cell) => {
             cell.innerHTML = cellValues[i];
             i += 1;
         });
-        console.log(cells);
+
+        return grid_cells;
     };
 
     createGridDivs();
-    updateCellDivs();
+    grid_cells = updateCellDivs();
+
+    grid_cells.forEach((cell) => {
+        cell.addEventListener("click", divClicked);
+    });
+
+    function divClicked() {
+        index = Gameboard.convert1Dto2D(this.id.charAt(1));
+        token = GameController.getTurn().getToken();
+
+        Gameboard.changeCell(index[0], index[1], token);
+        updateCellDivs();
+
+        GameController.switchTurn();
+    }
+
     return {};
 })();
 
