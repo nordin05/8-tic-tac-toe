@@ -48,7 +48,6 @@ const Gameboard = (function () {
     };
 
     const IsGameOver = function () {
-        renderBoard();
         updateCellVar();
 
         checkArray = [checkHorizontals(), checkVerticals(), checkDiagonals()];
@@ -120,7 +119,6 @@ const Gameboard = (function () {
         return [row, column];
     };
 
-    renderBoard();
     return { changeCell, IsEmpty, IsGameOver, updateCellVar, convert1Dto2D };
 })();
 
@@ -136,25 +134,16 @@ const GameController = (function () {
         currentTurn = currentTurn === player1 ? player2 : player1;
     };
 
-    const printTurn = function () {
-        console.log(`${currentTurn.getName()}'s turn.`);
-    };
-
-    const getClickedCell = function () {
-        return [prompt("Choose row"), prompt("Choose column")];
-    };
-
     const startRound = function (row, column) {
         if (Gameboard.IsEmpty(row, column)) {
             Gameboard.changeCell(row, column, currentTurn.getToken());
             outcome = Gameboard.IsGameOver();
             if (outcome == true) {
                 winner = currentTurn.getName();
-                console.log("WINNER!");
-                console.log(currentTurn.getName());
+                screenController.createWinnerDiv();
             } else if (outcome == undefined) {
-                winner = "Tied";
-                console.log("TIE!");
+                winner = currentTurn.getName();
+                screenController.createWinnerDiv();
             } else switchTurn();
         } else {
             console.log(
@@ -163,11 +152,14 @@ const GameController = (function () {
         }
     };
 
-    return { startRound, getWinner, getTurn, switchTurn };
+    return { startRound, getWinner, getTurn };
 })();
 
 const screenController = (function () {
     const grid_container = document.querySelector(".grid-container");
+    const context_text = document.querySelector(".game-context p");
+
+    updateTurnText();
 
     const createGridDivs = function () {
         for (let i = 0; i < 3 * 3; i++) {
@@ -200,12 +192,27 @@ const screenController = (function () {
     function divClicked() {
         if (GameController.getWinner() == undefined) {
             index = Gameboard.convert1Dto2D(this.id.charAt(1));
-            token = GameController.getTurn().getToken();
 
             GameController.startRound(index[0], index[1]);
             updateCellDivs();
+            updateTurnText();
         }
     }
 
-    return {};
+    function updateTurnText() {
+        context_text.innerHTML = `${GameController.getTurn().getName()}'s turn`;
+    }
+
+    function createWinnerDiv() {
+        const newDiv = document.createElement("div");
+        newDiv.id = "winner";
+
+        p = document.createElement("p");
+        winner = GameController.getWinner();
+        p.innerHTML = winner;
+
+        newDiv.appendChild(p);
+        document.body.appendChild(newDiv);
+    }
+    return { createWinnerDiv };
 })();
