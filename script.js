@@ -113,7 +113,6 @@ const Gameboard = (function () {
     };
 
     const convert1Dto2D = function (str) {
-        console.log(str);
         index = parseInt(str) - 1;
         row = Math.floor(index / 3);
         column = index % 3;
@@ -145,13 +144,7 @@ const GameController = (function () {
         return [prompt("Choose row"), prompt("Choose column")];
     };
 
-    const startRound = function () {
-        printTurn();
-
-        cell = getClickedCell();
-        row = cell[0];
-        column = cell[1];
-
+    const startRound = function (row, column) {
         if (Gameboard.IsEmpty(row, column)) {
             Gameboard.changeCell(row, column, currentTurn.getToken());
             outcome = Gameboard.IsGameOver();
@@ -205,18 +198,14 @@ const screenController = (function () {
     });
 
     function divClicked() {
-        index = Gameboard.convert1Dto2D(this.id.charAt(1));
-        token = GameController.getTurn().getToken();
+        if (GameController.getWinner() == undefined) {
+            index = Gameboard.convert1Dto2D(this.id.charAt(1));
+            token = GameController.getTurn().getToken();
 
-        Gameboard.changeCell(index[0], index[1], token);
-        updateCellDivs();
-
-        GameController.switchTurn();
+            GameController.startRound(index[0], index[1]);
+            updateCellDivs();
+        }
     }
 
     return {};
 })();
-
-// while (GameController.getWinner() == undefined) {
-//     GameController.startRound();
-// }
