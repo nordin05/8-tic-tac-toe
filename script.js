@@ -149,7 +149,7 @@ const GameController = (function () {
                 winner = currentTurn.getName();
                 screenController.createWinnerDiv();
             } else if (outcome == undefined) {
-                winner = currentTurn.getName();
+                winner = "You Tied!";
                 screenController.createWinnerDiv();
             } else switchTurn();
         } else {
@@ -188,12 +188,14 @@ const screenController = (function () {
         return grid_cells;
     };
 
-    createGridDivs();
-    grid_cells = updateCellDivs();
+    const showScreen = function () {
+        createGridDivs();
+        grid_cells = updateCellDivs();
 
-    grid_cells.forEach((cell) => {
-        cell.addEventListener("click", divClicked);
-    });
+        grid_cells.forEach((cell) => {
+            cell.addEventListener("click", divClicked);
+        });
+    };
 
     function divClicked() {
         if (GameController.getWinner() == undefined) {
@@ -215,13 +217,16 @@ const screenController = (function () {
 
         p = document.createElement("p");
         winner = GameController.getWinner();
+        if (winner != "You Tied!") {
+            winner = `${winner} won!`;
+        }
         p.innerHTML = winner;
 
         newDiv.appendChild(p);
         document.body.appendChild(newDiv);
     }
 
-    return { createWinnerDiv, updateTurnText };
+    return { createWinnerDiv, updateTurnText, showScreen };
 })();
 
 const form = document.querySelector("#myForm");
@@ -235,5 +240,6 @@ form.addEventListener("submit", (e) => {
     player1.changeName(name1);
     player2.changeName(name2);
 
+    screenController.showScreen();
     screenController.updateTurnText();
 });
