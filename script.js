@@ -1,7 +1,14 @@
 const Player = function (name, token) {
     const getName = () => name;
     const getToken = () => token;
-    return { getName, getToken };
+    const changeName = function (newName) {
+        name = newName;
+    };
+    return { getName, getToken, changeName };
+};
+
+Player.prototype.changeName = function (newName) {
+    this.name = newName;
 };
 
 const player1 = Player("Player 1", "X");
@@ -158,8 +165,7 @@ const GameController = (function () {
 const screenController = (function () {
     const grid_container = document.querySelector(".grid-container");
     const context_text = document.querySelector(".game-context p");
-
-    updateTurnText();
+    const form = document.querySelector("#myForm");
 
     const createGridDivs = function () {
         for (let i = 0; i < 3 * 3; i++) {
@@ -214,5 +220,20 @@ const screenController = (function () {
         newDiv.appendChild(p);
         document.body.appendChild(newDiv);
     }
-    return { createWinnerDiv };
+
+    return { createWinnerDiv, updateTurnText };
 })();
+
+const form = document.querySelector("#myForm");
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    let name1 = document.querySelector('[id = "player 1"]').value;
+    let name2 = document.querySelector('[id = "player 2"]').value;
+
+    player1.changeName(name1);
+    player2.changeName(name2);
+
+    screenController.updateTurnText();
+});
