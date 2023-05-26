@@ -7,17 +7,46 @@ h1 {
 }
 
 .grid-container {
-    width: 400px;
-    height: 400px;
+    width: 500px;
+    height: 500px;
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    grid-gap: 10px;
 }
 
 .grid-container div {
     background-color: blanchedalmond;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 100px;
+    color: rgb(248, 173, 75);
+    border: 5px solid rgb(255, 132, 132);
+}
+
+#c1,
+#c4,
+#c7 {
+    border-left: none;
+}
+
+#c1,
+#c2,
+#c3 {
+    border-top: none;
+}
+
+#c3,
+#c6,
+#c9 {
+    border-right: none;
+}
+
+#c7,
+#c8,
+#c9 {
+    border-bottom: none;
 }
 
 #myForm {
