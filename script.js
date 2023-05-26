@@ -21,12 +21,16 @@ const Gameboard = (function () {
 
     let c1, c2, c3, c4, c5, c6, c7, c8, c9;
 
-    for (let i = 0; i < rows; i++) {
-        boardArray[i] = [];
-        for (let j = 0; j < columns; j++) {
-            boardArray[i].push("");
+    const create2DArray = function () {
+        for (let i = 0; i < rows; i++) {
+            boardArray[i] = [];
+            for (let j = 0; j < columns; j++) {
+                boardArray[i].push("");
+            }
         }
-    }
+    };
+
+    create2DArray();
 
     const updateCellVar = function () {
         c1 = boardArray[0][0];
@@ -48,10 +52,6 @@ const Gameboard = (function () {
 
     const IsEmpty = function (row, column) {
         return boardArray[row][column] == "";
-    };
-
-    const renderBoard = function () {
-        console.table(boardArray);
     };
 
     const IsGameOver = function () {
@@ -126,7 +126,19 @@ const Gameboard = (function () {
         return [row, column];
     };
 
-    return { changeCell, IsEmpty, IsGameOver, updateCellVar, convert1Dto2D };
+    const reset = function () {
+        boardArray.length = 0;
+        create2DArray();
+    };
+
+    return {
+        changeCell,
+        IsEmpty,
+        IsGameOver,
+        updateCellVar,
+        convert1Dto2D,
+        reset,
+    };
 })();
 
 const GameController = (function () {
@@ -152,20 +164,20 @@ const GameController = (function () {
                 winner = "You Tied!";
                 screenController.createWinnerDiv();
             } else switchTurn();
-        } else {
-            console.log(
-                "This cell has already been picked, please choose another."
-            );
         }
     };
 
-    return { startRound, getWinner, getTurn };
+    const reset = function () {
+        winner = undefined;
+        currentTurn = player1;
+    };
+
+    return { startRound, getWinner, getTurn, reset };
 })();
 
 const screenController = (function () {
     const grid_container = document.querySelector(".grid-container");
     const context_text = document.querySelector(".game-context p");
-    const form = document.querySelector("#myForm");
 
     const createGridDivs = function () {
         for (let i = 0; i < 3 * 3; i++) {
@@ -197,6 +209,15 @@ const screenController = (function () {
         });
     };
 
+    const removeScreen = function () {
+        grid_cells = updateCellDivs();
+
+        grid_cells.forEach((cell) => {
+            cell.removeEventListener("click", divClicked);
+            cell.remove();
+        });
+    };
+
     function divClicked() {
         if (GameController.getWinner() == undefined) {
             index = Gameboard.convert1Dto2D(this.id.charAt(1));
@@ -207,23 +228,45 @@ const screenController = (function () {
         }
     }
 
-    function updateTurnText() {
+    const updateTurnText = function () {
         context_text.innerHTML = `${GameController.getTurn().getName()}'s turn`;
-    }
+    };
 
-    function createWinnerDiv() {
+    const createWinnerDiv = function () {
         const newDiv = document.createElement("div");
-        newDiv.id = "winner";
+        newDiv.id = "winner-popup";
 
-        p = document.createElement("p");
+        const p = document.createElement("p");
         winner = GameController.getWinner();
         if (winner != "You Tied!") {
             winner = `${winner} won!`;
         }
         p.innerHTML = winner;
 
+        const btn = document.createElement("button");
+        btn.addEventListener("click", resetClicked);
+        btn.innerHTML = "Retry?";
+
         newDiv.appendChild(p);
+        newDiv.appendChild(btn);
         document.body.appendChild(newDiv);
+    };
+
+    const removeWinnerDiv = function () {
+        const btn = document.querySelector("#winner-popup button");
+        btn.removeEventListener("click", resetClicked);
+        document.querySelector("#winner-popup").remove();
+    };
+
+    function resetClicked() {
+        player1.changeName("Player 1");
+        player2.changeName("Player 2");
+
+        Gameboard.reset();
+        GameController.reset();
+        context_text.innerHTML = "";
+        removeScreen();
+        removeWinnerDiv();
     }
 
     return { createWinnerDiv, updateTurnText, showScreen };
