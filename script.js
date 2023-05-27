@@ -267,21 +267,28 @@ const screenController = (function () {
         context_text.innerHTML = "";
         removeScreen();
         removeWinnerDiv();
+        document.querySelector("#myForm").style.display = "grid";
     }
 
     return { createWinnerDiv, updateTurnText, showScreen };
 })();
 
 const form = document.querySelector("#myForm");
+const input_player1 = document.querySelector('[id = "player 1"]');
+const input_player2 = document.querySelector('[id = "player 2"]');
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    let name1 = document.querySelector('[id = "player 1"]').value;
-    let name2 = document.querySelector('[id = "player 2"]').value;
+    let name1 = input_player1.value;
+    let name2 = input_player2.value;
 
     player1.changeName(name1);
     player2.changeName(name2);
+
+    form.style.display = "none";
+    input_player1.value = "";
+    input_player2.value = "";
 
     screenController.showScreen();
     screenController.updateTurnText();
