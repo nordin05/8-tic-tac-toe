@@ -3,9 +3,10 @@
     --form-bg-color: hsl(213.49deg 14.29% 36.43%);
     --form-h1-color: hsl(213.49deg 32.19% 17.2%);
     --form-btn-color: hsl(214.62deg 19.28% 48.77%);
-    --grid-bg-color: hsl(58.15deg 44.26% 53.21%);
+    --grid-bg-color: hsl(47.08deg 28.43% 50.22%);
     --popup-bg-color: hsl(166.15deg 51.14% 48.91%);
-    --main-text-color: hsl(35 74% 69%);
+    --turn-text-color: hsl(30.46deg 67.66% 53.92%);
+    --main-text-color: hsl(8.31deg 34.88% 48.31%);
 }
 
 body,
@@ -31,7 +32,13 @@ body {
 }
 
 .game-context {
-    margin-top: 20px;
+    width: 300px;
+    font-size: 30px;
+    text-align: center;
+    margin-top: 30px;
+    background-color: hsl(0deg 37.75% 29.61%);
+    color: hsl(33.23deg 28.18% 45.46%);
+    border-radius: 8px;
 }
 
 .grid-container {
@@ -51,8 +58,9 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 100px;
+    font-family: "Lato", sans-serif;
 
-    color: rgb(239 233 43);
+    color: rgb(243 220 131);
     /* border: 2px solid rgb(39 113 116); */
     border-radius: 10px;
 }
@@ -165,14 +173,18 @@ body {
 }
 
 #winner-popup {
-    background-color: var(--popup-bg-color);
+    background-color: var(--form-bg-color);
+    color: var(--form-h1-color);
     position: absolute;
-    top: 250px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    top: 250px;
     font-size: 36px;
+    border-radius: 5px;
 
     gap: 10px;
     padding: 10px 35px 10px 35px;
@@ -182,4 +194,12 @@ body {
     width: 60%;
     height: 25px;
     margin-top: 15px;
+
+    color: hsl(213.75deg 78.77% 85.16%);
+    background-color: var(--form-btn-color);
+    font-size: 16px;
+
+    border: none;
+    border-radius: 10px;
+    margin-top: 5px;
 }
