@@ -63,11 +63,13 @@ body {
     color: rgb(243 220 131);
     border-radius: 10px;
     opacity: 0;
+    transition: 0.25s;
 }
 
-/* .grid-container #c1 {
-    animation: positionIN 1.25s infinite, cellOpacityIN 1.25s infinite;
-} */
+.grid-container div:hover {
+    scale: 1.05;
+    filter: brightness(1.1);
+}
 
 @keyframes positionIN {
     0% {
