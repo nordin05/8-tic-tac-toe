@@ -204,8 +204,15 @@ const screenController = (function () {
         createGridDivs();
         grid_cells = updateCellDivs();
 
+        i = 1;
         grid_cells.forEach((cell) => {
-            cell.addEventListener("click", divClicked);
+            cell.style.zIndex = i;
+            setTimeout(function () {
+                console.log(i);
+                cell.style.animation = `positionIN 1.25s forwards, cellOpacityIN 1.25s forwards, cellColorIN 1.25s forwards`;
+                cell.addEventListener("click", divClicked);
+            }, 200 * i);
+            i = i + 1;
         });
     };
 
