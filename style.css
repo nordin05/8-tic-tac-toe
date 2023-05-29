@@ -1,8 +1,8 @@
 :root {
     --main-bg-color: hsl(0deg 34.04% 36.86%);
-    --form-bg-color: hsl(213.49deg 14.29% 36.43%);
-    --form-h1-color: hsl(213.49deg 32.19% 17.2%);
-    --form-btn-color: hsl(214.62deg 19.28% 48.77%);
+    --form-bg-color: hsl(324deg 14.29% 36.43%);
+    --form-h1-color: hsl(240.92deg 32.19% 17.2%);
+    --form-btn-color: hsl(265.85deg 19.28% 48.77%);
     --grid-bg-color: hsl(47.08deg 28.43% 50.22%);
     --popup-bg-color: hsl(166.15deg 51.14% 48.91%);
     --turn-text-color: hsl(30.46deg 67.66% 53.92%);
@@ -61,33 +61,8 @@ body {
     font-family: "Lato", sans-serif;
 
     color: rgb(243 220 131);
-    /* border: 2px solid rgb(39 113 116); */
     border-radius: 10px;
 }
-
-/* #c1,
-#c4,
-#c7 {
-    border-left: none;
-}
-
-#c1,
-#c2,
-#c3 {
-    border-top: none;
-}
-
-#c3,
-#c6,
-#c9 {
-    border-right: none;
-}
-
-#c7,
-#c8,
-#c9 {
-    border-bottom: none;
-} */
 
 #myForm {
     background-color: var(--form-bg-color);
@@ -101,6 +76,31 @@ body {
     border-radius: 5px;
     margin-top: 30px;
     padding: 5px;
+    animation: scaleIN 1.25s forwards, opacityIN 1.25s;
+}
+
+@keyframes scaleIN {
+    0% {
+        scale: 0;
+        animation-timing-function: cubic-bezier(0.54, 0.05, 0.63, 0.95);
+    }
+    35% {
+        scale: 1.03;
+        animation-timing-function: cubic-bezier(0.15, 2.5, 0.28, 0.53);
+    }
+    100% {
+        scale: 1;
+    }
+}
+
+@keyframes opacityIN {
+    0% {
+        opacity: 0;
+        /* animation-timing-function: cubic-bezier(0.54, 0.05, 0.63, 0.95); */
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 #myForm h1 {
@@ -195,7 +195,7 @@ body {
     height: 25px;
     margin-top: 15px;
 
-    color: hsl(213.75deg 78.77% 85.16%);
+    color: hsl(240.92deg 78.77% 85.16%);
     background-color: var(--form-btn-color);
     font-size: 16px;
 
