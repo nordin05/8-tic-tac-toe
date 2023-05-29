@@ -257,12 +257,15 @@ const screenController = (function () {
         newDiv.appendChild(p);
         newDiv.appendChild(btn);
         document.body.appendChild(newDiv);
+
+        document.querySelector(".tint").style.display = "block";
     };
 
     const removeWinnerDiv = function () {
         const btn = document.querySelector("#winner-popup button");
         btn.removeEventListener("click", resetClicked);
         document.querySelector("#winner-popup").remove();
+        document.querySelector(".tint").style.display = "none";
     };
 
     function resetClicked() {
